@@ -24,7 +24,7 @@
     "url": "https://github.com/Omnikon-Org/PromptForge.git",
     "directory": "packages/core"
   },
-  "homepage": "https://github.com/Omnikon-Org/PromptForge/tree/main/packages/core#readme",
+  "homepage": "https://prompt-forge-docs.vercel.app/",
   "bugs": {
     "url": "https://github.com/Omnikon-Org/PromptForge/issues"
   },

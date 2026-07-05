@@ -36,7 +36,7 @@
     "url": "https://github.com/promptforge/promptforge.git",
     "directory": "packages/cli"
   },
-  "homepage": "https://github.com/promptforge/promptforge/tree/main/packages/cli#readme",
+  "homepage": "https://prompt-forge-docs.vercel.app/",
   "bugs": {
     "url": "https://github.com/promptforge/promptforge/issues"
   },

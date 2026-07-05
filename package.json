@@ -29,5 +29,6 @@
     "prettier": "^3.2.5",
     "turbo": "^1.13.2",
     "typescript": "^5.4.5"
-  }
+  },
+  "homepage": "https://prompt-forge-docs.vercel.app/"
 }

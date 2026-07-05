@@ -27,7 +27,7 @@
     "url": "https://github.com/promptforge/promptforge.git",
     "directory": "packages/templates"
   },
-  "homepage": "https://github.com/promptforge/promptforge/tree/main/packages/templates#readme",
+  "homepage": "https://prompt-forge-docs.vercel.app/",
   "bugs": {
     "url": "https://github.com/promptforge/promptforge/issues"
   },

@@ -24,7 +24,7 @@
     "url": "https://github.com/promptforge/promptforge.git",
     "directory": "packages/analyzer"
   },
-  "homepage": "https://github.com/promptforge/promptforge/tree/main/packages/analyzer#readme",
+  "homepage": "https://prompt-forge-docs.vercel.app/",
   "bugs": {
     "url": "https://github.com/promptforge/promptforge/issues"
   },

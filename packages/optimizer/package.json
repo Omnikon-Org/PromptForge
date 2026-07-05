@@ -27,7 +27,7 @@
     "url": "https://github.com/promptforge/promptforge.git",
     "directory": "packages/optimizer"
   },
-  "homepage": "https://github.com/promptforge/promptforge/tree/main/packages/optimizer#readme",
+  "homepage": "https://prompt-forge-docs.vercel.app/",
   "bugs": {
     "url": "https://github.com/promptforge/promptforge/issues"
   },
