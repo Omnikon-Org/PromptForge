@@ -1,7 +1,6 @@
 {
   "name": "@promptforgee/registry",
-  "version": "0.1.1",
-  "private": true,
+  "version": "0.1.2",
   "description": "PromptForge registry package",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -31,5 +30,8 @@
   "homepage": "https://github.com/promptforge/promptforge/tree/main/packages/registry#readme",
   "bugs": {
     "url": "https://github.com/promptforge/promptforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

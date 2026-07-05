@@ -8,7 +8,6 @@ async function main() {
     .role('Expert Senior Engineer')
     .task('Please write a secure login function.')
     .constraint('Include error handling.')
-    .constraint('Include error handling.') // Intentional duplicate
     .context('We are using Express and Node.js v18.')
     .output('TypeScript code');
 

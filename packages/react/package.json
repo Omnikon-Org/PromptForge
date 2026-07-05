@@ -1,7 +1,6 @@
 {
   "name": "@promptforgee/react",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.1",
   "description": "PromptForge react package",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -28,5 +27,8 @@
   "homepage": "https://github.com/promptforge/promptforge/tree/main/packages/react#readme",
   "bugs": {
     "url": "https://github.com/promptforge/promptforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

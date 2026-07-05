@@ -1,7 +1,6 @@
 {
   "name": "@promptforgee/analyzer",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.1",
   "description": "PromptForge analyzer package",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -28,5 +27,8 @@
   "homepage": "https://github.com/promptforge/promptforge/tree/main/packages/analyzer#readme",
   "bugs": {
     "url": "https://github.com/promptforge/promptforge/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
