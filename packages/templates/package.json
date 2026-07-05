@@ -1,0 +1,35 @@
+{
+  "name": "@promptforgee/templates",
+  "version": "0.1.1",
+  "private": true,
+  "description": "PromptForge templates package",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "lint": "eslint src/ --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "@promptforgee/core": "workspace:^"
+  },
+  "author": "PromptForge Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/promptforge/promptforge.git",
+    "directory": "packages/templates"
+  },
+  "homepage": "https://github.com/promptforge/promptforge/tree/main/packages/templates#readme",
+  "bugs": {
+    "url": "https://github.com/promptforge/promptforge/issues"
+  }
+}

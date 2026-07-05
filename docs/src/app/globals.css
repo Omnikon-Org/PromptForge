@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050608;
+  --foreground: #FFFFFF;
+  --card: #0B0D11;
+  --card-foreground: #FFFFFF;
+  --popover: #0B0D11;
+  --popover-foreground: #FFFFFF;
+  --primary: #22C55E; /* Minimal Green Accent */
+  --primary-foreground: #050608;
+  --secondary: #111827;
+  --secondary-foreground: #F9FAFB;
+  --muted: #111827;
+  --muted-foreground: #9CA3AF;
+  --accent: #111827;
+  --accent-foreground: #F9FAFB;
+  --destructive: #7F1D1D;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #22C55E;
+  --radius: 0; /* Minimal, sharp, or very small radius */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle dot/plus grid pattern for the background */
+.bg-grid-pattern {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-plus-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.5 11.5V6h1v5.5H18v1h-5.5V18h-1v-5.5H6v-1h5.5z' fill='rgba(255,255,255,0.05)' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* Syntax Highlighting for the Code Editor */
+.token.keyword { color: #C678DD; }
+.token.function { color: #61AFEF; }
+.token.string { color: #98C379; }
+.token.comment { color: #5C6370; font-style: italic; }
+.token.operator { color: #56B6C2; }
+.token.punctuation { color: #ABB2BF; }
+.token.property { color: #E06C75; }
+.token.class-name { color: #E5C07B; }
+.token.variable { color: #E06C75; }
+
+/* Custom Scrollbar for editor */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+}
