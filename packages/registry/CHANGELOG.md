@@ -1,5 +1,13 @@
 # @promptforgee/registry
 
+## 0.1.3
+
+### Patch Changes
+
+- docs: add Vercel homepage link to package.json metadata
+- Updated dependencies
+  - @promptforgee/core@1.0.1
+
 ## 0.1.2
 
 ### Patch Changes
