@@ -9,7 +9,7 @@ export function TopNav() {
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'Docs', href: '/docs' },
-    { name: 'Playground', href: '/playground' },
+    { name: 'Open Studio', href: '/studio' },
   ];
 
   return (

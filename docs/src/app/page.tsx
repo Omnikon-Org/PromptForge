@@ -64,10 +64,10 @@ export default function Home() {
               <ArrowRight className="w-4 h-4 text-[#22C55E] transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
-              href="/playground"
+              href="/studio"
               className="group flex items-center gap-2 text-sm font-mono text-[#9CA3AF] hover:text-white transition-colors"
             >
-              Explore Playground{' '}
+              Open Studio{' '}
               <ArrowRight className="w-4 h-4 opacity-50 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
@@ -558,8 +558,8 @@ export default function Home() {
               <Link href="/docs" className="hover:text-white transition-colors">
                 Docs
               </Link>
-              <Link href="/playground" className="hover:text-white transition-colors">
-                Playground
+              <Link href="/studio" className="hover:text-white transition-colors">
+                Studio
               </Link>
               <Link
                 href="https://github.com/promptforge/promptforge"
