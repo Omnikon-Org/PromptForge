@@ -221,9 +221,12 @@ You MUST output ONLY valid JSON in the following format, with no markdown format
 
         let content = response.choices[0].message.content;
         if (!content) throw new Error('Empty response from LLM');
-        if (content.includes('\`\`\`'))
-          content = content.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '');
-        const data = JSON.parse(content.trim());
+
+        // Extract JSON using regex in case the LLM added extra conversational text
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('No valid JSON object found in response.');
+
+        const data = JSON.parse(jsonMatch[0]);
         set({ analysisReport: data, score: data.score, tokens: Math.ceil(s.compiled.length / 4) });
       } catch (err) {
         const e = err as Error;
