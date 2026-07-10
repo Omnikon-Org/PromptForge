@@ -210,7 +210,7 @@ You MUST output ONLY valid JSON in the following format, with no markdown format
 { "score": 85, "strengths": ["string"], "weaknesses": ["string"], "suggestions": ["string"] }`;
 
         const response = await hf.chatCompletion({
-          model: 'Qwen/Qwen2.5-72B-Instruct',
+          model: 'Qwen/Qwen2.5-7B-Instruct',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: s.compiled },
@@ -246,7 +246,7 @@ Remove filler words, strengthen constraints, and structure the prompt cleanly us
 Return ONLY the rewritten prompt text. Do not wrap in quotes or code blocks unless part of the prompt.`;
 
         const response = await hf.chatCompletion({
-          model: 'Qwen/Qwen2.5-72B-Instruct',
+          model: 'Qwen/Qwen2.5-7B-Instruct',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: s.compiled },
