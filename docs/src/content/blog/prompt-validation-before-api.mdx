@@ -1,0 +1,29 @@
+---
+title: "Prompt Validation Before API Calls"
+description: "Stop wasting money on malformed prompts. Validate locally before hitting OpenAI."
+date: "2024-03-25"
+---
+
+Every time you send a prompt to an LLM provider, you pay a latency cost and a financial cost. If the prompt is missing critical context or violates token limits, you've wasted both.
+
+## Local Validation
+
+PromptForge introduces the concept of **Pre-flight Validation**. 
+
+When you use `pf.define()`, PromptForge automatically validates the input variables against the schema *before* stringifying the output.
+
+```typescript
+const prompt = pf.define({
+  input: z.object({ query: z.string().min(10) }),
+  messages: (vars) => [ pf.user`${vars.query}` ]
+});
+
+// Throws a ZodError locally! No API call is made.
+prompt.compile({ query: "short" });
+```
+
+## Token Estimation
+
+Beyond schema validation, you can use the PromptForge Analyzer to statically estimate token counts locally to prevent `context_length_exceeded` errors in production.
+
+By validating locally, your production AI applications become significantly more robust, cheaper, and faster.

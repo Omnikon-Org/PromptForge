@@ -1,0 +1,47 @@
+---
+title: "SQL Generator"
+description: "A type-safe prompt for converting natural language to valid PostgreSQL queries."
+date: "2024-04-01"
+---
+
+This example demonstrates how to build a highly constrained Text-to-SQL generator using PromptForge.
+
+## The Code
+
+```typescript
+import { pf } from '@promptforgee/core';
+import { z } from 'zod';
+
+export const sqlGenerator = pf.define({
+  input: z.object({
+    schema: z.string(),
+    query: z.string(),
+    dialect: z.enum(['postgresql', 'mysql', 'sqlite']).default('postgresql')
+  }),
+  output: z.object({
+    sql: z.string().describe("The generated SQL query"),
+    explanation: z.string().describe("Brief explanation of the query")
+  }),
+  messages: (vars) => [
+    pf.system`You are an expert database administrator. 
+Your task is to convert natural language into valid ${vars.dialect} queries.
+
+Database Schema:
+${vars.schema}`,
+    pf.user`${vars.query}`
+  ]
+});
+```
+
+## Usage
+
+```typescript
+const result = await sqlGenerator.run({
+  schema: "CREATE TABLE users (id INT, email VARCHAR, created_at TIMESTAMP);",
+  query: "Find all users who signed up today",
+  dialect: "postgresql"
+});
+
+console.log(result.sql);
+// "SELECT * FROM users WHERE DATE(created_at) = CURRENT_DATE;"
+```

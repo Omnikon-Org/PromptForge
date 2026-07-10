@@ -1,0 +1,37 @@
+---
+title: "core"
+description: "The foundational PromptForge library for defining, compiling, and validating prompts."
+date: "2024-04-01"
+---
+
+`@promptforgee/core` is the engine behind the PromptForge ecosystem. It provides the essential primitives for defining, validating, and compiling prompts in a strictly typed manner.
+
+## Installation
+
+```bash
+npm install @promptforgee/core
+```
+
+## Features
+
+- **Zod Integration**: Define your input schemas and output schemas using Zod.
+- **Type-safe Compilation**: The compiler ensures you never pass an `undefined` variable to an LLM.
+- **Provider Agnostic**: Compiles down to standard OpenAI or Anthropic message arrays.
+- **Local Validation**: Fails fast locally if inputs are malformed.
+
+## Quick Start
+
+```typescript
+import { pf } from '@promptforgee/core';
+import { z } from 'zod';
+
+const myPrompt = pf.define({
+  input: z.object({ name: z.string() }),
+  messages: (vars) => [
+    pf.user`Hello ${vars.name}!`
+  ]
+});
+
+// Returns [{ role: "user", content: "Hello Alice!" }]
+const compiled = myPrompt.compile({ name: "Alice" }); 
+```

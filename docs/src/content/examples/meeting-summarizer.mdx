@@ -1,0 +1,37 @@
+---
+title: "Meeting Summarizer"
+description: "Extract action items and key decisions from meeting transcripts."
+date: "2024-04-05"
+---
+
+A highly structured prompt for processing raw meeting transcripts (e.g. from Zoom or Otter.ai).
+
+## The Code
+
+```typescript
+import { pf } from '@promptforgee/core';
+import { z } from 'zod';
+
+export const meetingSummarizer = pf.define({
+  input: z.object({
+    transcript: z.string(),
+    attendees: z.array(z.string())
+  }),
+  output: z.object({
+    tl_dr: z.string(),
+    key_decisions: z.array(z.string()),
+    action_items: z.array(z.object({
+      owner: z.string(),
+      task: z.string(),
+      deadline: z.string().optional()
+    }))
+  }),
+  messages: (vars) => [
+    pf.system`You are an Executive Assistant. 
+Analyze the provided meeting transcript.
+Extract the high-level summary, key decisions, and explicitly assigned action items.
+Only assign action items to the following attendees: ${vars.attendees.join(', ')}.`,
+    pf.user`${vars.transcript}`
+  ]
+});
+```

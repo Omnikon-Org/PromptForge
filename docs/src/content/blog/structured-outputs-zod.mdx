@@ -1,0 +1,36 @@
+---
+title: "Structured Outputs with Zod and PromptForge"
+description: "Guarantee JSON outputs from OpenAI and Claude using Zod schemas."
+date: "2024-03-27"
+---
+
+Getting an LLM to output valid JSON consistently is one of the most painful aspects of building AI applications.
+
+You write "OUTPUT JSON ONLY" in all caps, and yet the LLM still replies with "Here is your JSON: ```json ... ```".
+
+## The Zod Approach
+
+PromptForge integrates deeply with `zod` and `@promptforgee/schema` to automatically enforce Structured Outputs.
+
+```typescript
+import { pf } from '@promptforgee/core';
+import { z } from 'zod';
+
+const extractData = pf.define({
+  input: z.object({ text: z.string() }),
+  output: z.object({
+    entities: z.array(z.string()),
+    sentiment: z.enum(['positive', 'negative', 'neutral'])
+  }),
+  messages: (vars) => [
+    pf.user`Analyze this text: ${vars.text}`
+  ]
+});
+```
+
+When you define an `output` schema, PromptForge automatically:
+1. Injects strict JSON formatting instructions into the system prompt.
+2. Formats the schema so OpenAI's `response_format` (Structured Outputs) or Claude's Tool Calling can digest it perfectly.
+3. Automatically parses and validates the response at runtime.
+
+No more broken JSON strings. No more `JSON.parse` errors.

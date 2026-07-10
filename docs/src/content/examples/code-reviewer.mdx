@@ -1,0 +1,46 @@
+---
+title: "Code Reviewer"
+description: "Automated PR reviews focusing on performance and maintainability."
+date: "2024-04-04"
+---
+
+This prompt acts as a Senior Staff Engineer reviewing a Pull Request diff.
+
+## The Code
+
+```typescript
+import { pf } from '@promptforgee/core';
+import { z } from 'zod';
+
+export const prReviewer = pf.define({
+  input: z.object({
+    gitDiff: z.string(),
+    prTitle: z.string(),
+    prDescription: z.string()
+  }),
+  output: z.object({
+    summary: z.string(),
+    comments: z.array(z.object({
+      file: z.string(),
+      line: z.number(),
+      suggestion: z.string(),
+      category: z.enum(['performance', 'maintainability', 'bug', 'nit'])
+    })),
+    approve: z.boolean()
+  }),
+  messages: (vars) => [
+    pf.system`You are a strict but fair Staff Software Engineer reviewing a PR.
+Focus on:
+1. Algorithmic complexity (Performance)
+2. Clean code principles (Maintainability)
+3. Edge cases and off-by-one errors (Bugs)`,
+    pf.user`PR TITLE: ${vars.prTitle}
+DESCRIPTION: ${vars.prDescription}
+
+DIFF:
+\`\`\`diff
+${vars.gitDiff}
+\`\`\``
+  ]
+});
+```

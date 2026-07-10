@@ -1,0 +1,40 @@
+---
+title: "Security Auditor"
+description: "Analyze TypeScript code for OWASP Top 10 vulnerabilities."
+date: "2024-04-02"
+---
+
+A complex prompt that acts as a Static Application Security Testing (SAST) tool, returning structured vulnerability reports.
+
+## The Code
+
+```typescript
+import { pf } from '@promptforgee/core';
+import { z } from 'zod';
+
+export const securityAuditor = pf.define({
+  input: z.object({
+    code: z.string(),
+    language: z.enum(['typescript', 'javascript', 'python'])
+  }),
+  output: z.object({
+    vulnerabilities: z.array(z.object({
+      cwe: z.string(),
+      severity: z.enum(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']),
+      line_number: z.number(),
+      description: z.string(),
+      remediation: z.string()
+    })),
+    is_safe: z.boolean()
+  }),
+  messages: (vars) => [
+    pf.system`You are a Senior Application Security Engineer.
+Analyze the provided ${vars.language} code for OWASP Top 10 vulnerabilities.
+Be highly critical. Do not flag false positives for standard library usage.`,
+    pf.user`Code to analyze:
+\`\`\`${vars.language}
+${vars.code}
+\`\`\``
+  ]
+});
+```

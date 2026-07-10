@@ -1,0 +1,40 @@
+---
+title: "Why String Prompts Don't Scale"
+description: "The hidden costs of concatenating strings for LLMs and why we need a better abstraction."
+date: "2024-03-20"
+---
+
+When building your first AI feature, a simple template literal seems sufficient:
+
+```typescript
+const prompt = `Summarize the following document: ${document}`;
+```
+
+It works perfectly. Until it doesn't.
+
+## The Scaling Problem
+
+As your application grows, your prompts become complex architectures of instructions, constraints, context variables, and examples. Soon, your codebase is littered with something like this:
+
+```typescript
+let prompt = `You are a helpful assistant.\n`;
+if (userIsAdmin) {
+  prompt += `Include raw SQL queries in the output.\n`;
+}
+if (hasContext) {
+  prompt += `Use this context: ${context.join('\n')}\n`;
+}
+prompt += `Now answer this: ${query}`;
+```
+
+This approach leads to several critical failures:
+
+1. **No Type Safety**: If `context` changes shape, the compiler won't warn you. Your LLM simply hallucinates on `[object Object]`.
+2. **Poor Reusability**: You cannot easily share "Security Constraints" across different prompts without error-prone string interpolation.
+3. **No Validation**: You send the prompt to OpenAI and pay for tokens *before* realizing a critical variable was missing.
+
+## The Solution: Abstraction
+
+We don't build complex web applications by concatenating HTML strings in PHP anymore. We use React, Vue, or Svelte. 
+
+It's time to stop concatenating strings for LLMs. It's time to build prompts using a composable, type-safe abstraction. That is exactly why we built PromptForge.

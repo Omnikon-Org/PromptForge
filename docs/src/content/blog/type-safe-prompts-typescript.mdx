@@ -1,0 +1,42 @@
+---
+title: "Building Type-Safe Prompts in TypeScript"
+description: "How to use PromptForge to guarantee your prompts have the correct variables before execution."
+date: "2024-03-22"
+---
+
+The biggest risk in production AI systems is silent failure. If you pass an `undefined` variable into a string prompt, the LLM will try its best to reason about the literal string "undefined", leading to catastrophic hallucinations.
+
+## Enter PromptForge
+
+PromptForge solves this by introducing strict type safety into the prompt building process.
+
+```typescript
+import { pf } from '@promptforgee/core';
+import { z } from 'zod';
+
+const generateEmail = pf.define({
+  input: z.object({
+    recipientName: z.string(),
+    tone: z.enum(['formal', 'casual']),
+    keyPoints: z.array(z.string())
+  }),
+  messages: (vars) => [
+    pf.system`You are an expert copywriter. Write a ${vars.tone} email to ${vars.recipientName}.`,
+    pf.user`Ensure you cover these points:\n${vars.keyPoints.join('\n')}`
+  ]
+});
+```
+
+### Static Analysis
+
+Because `generateEmail` is tightly coupled to a Zod schema, TypeScript will refuse to compile if you forget a variable:
+
+```typescript
+// ❌ TypeScript Error: Property 'recipientName' is missing
+const messages = generateEmail.compile({
+  tone: 'formal',
+  keyPoints: ['Meeting at 3PM']
+});
+```
+
+By leveraging TypeScript's static analysis, PromptForge catches prompt engineering errors in your IDE, not in production.

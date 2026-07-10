@@ -1,0 +1,35 @@
+---
+title: "RAG Assistant"
+description: "A prompt for Retrieval-Augmented Generation that cites its sources."
+date: "2024-04-03"
+---
+
+A robust prompt for answering user queries strictly based on provided context documents, ensuring grounded responses and source citations.
+
+## The Code
+
+```typescript
+import { pf } from '@promptforgee/core';
+import { z } from 'zod';
+
+export const ragAssistant = pf.define({
+  input: z.object({
+    query: z.string(),
+    documents: z.array(z.object({
+      id: z.string(),
+      content: z.string()
+    }))
+  }),
+  messages: (vars) => [
+    pf.system`You are an expert knowledge assistant.
+Answer the user's query strictly using the provided documents.
+If the answer is not contained in the documents, reply with "I cannot answer this based on the provided context."
+
+When providing facts, you MUST cite the document ID inline, e.g. [doc_1].
+
+CONTEXT DOCUMENTS:
+${vars.documents.map(d => `[${d.id}]\n${d.content}`).join('\n\n')}`,
+    pf.user`${vars.query}`
+  ]
+});
+```

@@ -1,0 +1,31 @@
+---
+title: "Compile Prompts Like Code"
+description: "Why treating prompts as executable code changes everything."
+date: "2024-03-30"
+---
+
+In modern software engineering, we write source code, compile it, lint it, test it, and then run it.
+
+Prompt Engineering has traditionally skipped all these steps. You write a string and immediately run it in production.
+
+## The Compilation Step
+
+PromptForge introduces the concept of a **Prompt Compiler**.
+
+```typescript
+// 1. Source
+const myPrompt = pf.define({ ... });
+
+// 2. Compile (Validates inputs, formats messages, resolves fragments)
+const messages = myPrompt.compile({ user: "Alice" });
+
+// 3. Execute
+const result = await myPrompt.run(messages);
+```
+
+By separating the compilation step from the execution step, we unlock immense power:
+- **Linting**: We can analyze the compiled prompt for generic filler words ("You are a helpful assistant").
+- **Testing**: We can write unit tests against `myPrompt.compile(...)` without mocking OpenAI.
+- **Optimization**: We can run the compiled prompt through an optimizer before executing it.
+
+Treat your prompts like code, and they will become as reliable as code.
