@@ -168,7 +168,7 @@ You MUST output ONLY valid JSON in the following format, with no markdown format
 }`;
 
       const response = await hf.chatCompletion({
-        model: 'meta-llama/Llama-3.2-3B-Instruct',
+        model: 'Qwen/Qwen2.5-72B-Instruct',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: compiled },
@@ -214,7 +214,7 @@ Remove filler words, strengthen constraints, and structure the prompt cleanly us
 Return ONLY the rewritten prompt text. Do not wrap in quotes or code blocks unless part of the prompt. Do not include introductory text.`;
 
       const response = await hf.chatCompletion({
-        model: 'meta-llama/Llama-3.2-3B-Instruct',
+        model: 'Qwen/Qwen2.5-72B-Instruct',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: compiled },
