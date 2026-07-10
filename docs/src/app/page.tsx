@@ -562,9 +562,8 @@ export default function Home() {
                 Studio
               </Link>
               <Link
-                href="https://github.com/promptforge/promptforge"
-                target="_blank"
-                className="hover:text-white transition-colors"
+                href="https://github.com/Omnikon-Org/PromptForge"
+                className="text-sm text-gray-400 hover:text-white transition-colors"
               >
                 GitHub
               </Link>

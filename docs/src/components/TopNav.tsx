@@ -32,7 +32,7 @@ export function TopNav() {
         );
       })}
       <Link
-        href="https://github.com/promptforge/promptforge"
+        href="https://github.com/Omnikon-Org/PromptForge"
         target="_blank"
         className="hover:text-white transition-colors"
       >
