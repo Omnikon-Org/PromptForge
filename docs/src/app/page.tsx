@@ -15,7 +15,6 @@ import {
   Check,
 } from 'lucide-react';
 import { useState } from 'react';
-import { TopNav } from '@/components/TopNav';
 
 // --- Reusable Components ---
 const CopyInstall = () => {
@@ -43,8 +42,6 @@ const CopyInstall = () => {
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#050608] text-[#9CA3AF] font-sans selection:bg-[#3B82F6] selection:text-white">
-      <TopNav />
-
       <main className="flex flex-col items-center overflow-hidden">
         {/* ==================================================== */}
         {/* HERO SECTION                                         */}
