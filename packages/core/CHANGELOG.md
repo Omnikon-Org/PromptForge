@@ -1,5 +1,11 @@
 # @promptforgee/core
 
+## 1.0.2
+
+### Patch Changes
+
+- Update READMEs with production-quality documentation.
+
 ## 1.0.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@promptforgee/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Production-grade prompt engineering toolkit. Type-safe, composable, and extensible.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

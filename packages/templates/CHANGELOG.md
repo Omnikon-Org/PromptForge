@@ -1,5 +1,13 @@
 # @promptforgee/templates
 
+## 0.1.4
+
+### Patch Changes
+
+- Update READMEs with production-quality documentation.
+- Updated dependencies
+  - @promptforgee/core@1.0.2
+
 ## 0.1.3
 
 ### Patch Changes

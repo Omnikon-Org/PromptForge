@@ -1,6 +1,6 @@
 {
   "name": "@promptforgee/schema",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "PromptForge schema package",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

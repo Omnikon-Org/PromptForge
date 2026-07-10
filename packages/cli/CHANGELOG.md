@@ -1,5 +1,16 @@
 # @promptforgee/cli
 
+## 0.1.4
+
+### Patch Changes
+
+- Update READMEs with production-quality documentation.
+- Updated dependencies
+  - @promptforgee/core@1.0.2
+  - @promptforgee/analyzer@0.1.3
+  - @promptforgee/optimizer@0.1.4
+  - @promptforgee/templates@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

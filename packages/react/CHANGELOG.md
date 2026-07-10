@@ -1,5 +1,11 @@
 # @promptforgee/react
 
+## 0.1.3
+
+### Patch Changes
+
+- Update READMEs with production-quality documentation.
+
 ## 0.1.2
 
 ### Patch Changes
