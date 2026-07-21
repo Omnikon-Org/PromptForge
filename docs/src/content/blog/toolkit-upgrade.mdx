@@ -1,0 +1,94 @@
+---
+title: "The Ultimate Prompt Engineering Toolkit"
+description: "How to use PromptForge's new Tokenizer, Cost Estimator, Linter, and Benchmarking features."
+date: "2024-05-15"
+---
+
+Prompt engineering is transitioning from loose strings to rigorous software engineering. In PromptForge 2.0, we are introducing an entire suite of offline, zero-dependency tools for static analysis, linting, formatting, and benchmarking prompts. 
+
+## The Model Registry
+
+Instead of hardcoding max context windows or tokenizers, PromptForge now features a centralized **Model Registry**.
+
+```typescript
+import { ModelRegistry } from '@promptforgee/core';
+
+// Automatically supported
+ModelRegistry.registerModel({
+  name: 'my-custom-model',
+  provider: 'local',
+  family: 'llama',
+  maxContext: 4096,
+  pricing: { inputPer1k: 0, outputPer1k: 0, currency: 'USD' },
+  tokenizer: () => import('@promptforgee/core').then(m => m.countTokens)
+});
+```
+
+## The Unified Inspection API
+
+The `Prompt` class now features a chainable Developer Experience, running all diagnostics efficiently through a unified pipeline.
+
+```typescript
+import { Prompt } from '@promptforgee/core';
+
+const prompt = Prompt.create().task("Summarize this article: {{article}}");
+
+// 1. Inspect everything at once
+const report = await prompt.inspect({ model: 'gpt-4o' });
+console.log(report.tokens);
+console.log(report.cost);
+
+// 2. Or use chainable aliases
+const tokens = await prompt.tokens({ model: 'claude-3-opus-20240229' });
+const cost = await prompt.cost({ model: 'gemini-1.5-pro' });
+const diagnostics = await prompt.lint();
+```
+
+## Integrations
+
+PromptForge is completely provider-agnostic. You can build and lint your prompts locally, and pass them to any SDK.
+
+### OpenAI Example
+
+```typescript
+import OpenAI from 'openai';
+const openai = new OpenAI();
+
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [{ role: 'user', content: prompt.build() }]
+});
+```
+
+### Vercel AI SDK
+
+```typescript
+import { generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
+
+const { text } = await generateText({
+  model: openai('gpt-4o'),
+  prompt: prompt.build(),
+});
+```
+
+### LangChain
+
+```typescript
+import { PromptTemplate } from "@langchain/core/prompts";
+
+const langchainPrompt = PromptTemplate.fromTemplate(prompt.build());
+```
+
+## The New CLI Toolkit
+
+PromptForge now ships with a powerful ESLint-style CLI.
+
+```bash
+npx promptforge lint prompts.md
+npx promptforge doctor prompts.md
+npx promptforge stats prompts.md
+npx promptforge format --write prompts.md
+```
+
+`promptforge doctor` acts as a high-level health check, catching syntax errors and out-of-context issues before you ever hit a production API.

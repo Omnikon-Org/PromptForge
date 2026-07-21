@@ -3,12 +3,14 @@ import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 import ora from 'ora';
+import Table from 'cli-table3';
 import { analyzePrompt } from '@promptforgee/analyzer';
+import { inspectPrompt } from '@promptforgee/core';
 
 export const analyzeCommand = (program: Command) => {
   program
     .command('analyze <file>')
-    .description('Analyze a raw prompt text file for quality and token count')
+    .description('Analyze a raw prompt text file for quality, cost, and tokens')
     .action(async (file: string) => {
       const filePath = path.resolve(process.cwd(), file);
 
@@ -23,35 +25,40 @@ export const analyzeCommand = (program: Command) => {
 
       try {
         const report = await analyzePrompt(text);
+        const inspection = await inspectPrompt(text, { model: 'gpt-4o' });
+
         spinner.succeed('Analysis complete!\n');
 
         console.log(chalk.blue.bold('--- PromptForge Analysis Report ---'));
-        console.log(
-          `Overall Score: ${report.overallScore >= 80 ? chalk.green(report.overallScore) : chalk.yellow(report.overallScore)}/100`,
+
+        const table = new Table({
+          head: [chalk.cyan('Metric'), chalk.cyan('Value')],
+        });
+
+        table.push(
+          [
+            'Score',
+            `${report.overallScore >= 80 ? chalk.green(report.overallScore) : chalk.yellow(report.overallScore)}/100`,
+          ],
+          ['Clarity', `${report.clarity}%`],
+          ['Ambiguity', `${report.ambiguity}%`],
+          ['Tokens (GPT-4o)', chalk.cyan(inspection.tokens.toString())],
+          ['Estimated Cost / 1k Uses', `$${(inspection.cost.inputCost * 1000).toFixed(4)}`],
         );
-        console.log(`Clarity: ${report.clarity}%`);
-        console.log(`Ambiguity: ${report.ambiguity}%`);
-        console.log(`Readability: ${report.readability}`);
-        console.log(`Est. Tokens: ${chalk.cyan(report.estimatedTokenCount)}`);
 
-        if (report.missingInformation.length > 0) {
-          console.log(chalk.red.bold('\nMissing Information:'));
-          report.missingInformation.forEach((info) => console.log(chalk.red(`  - ${info}`)));
-        }
+        console.log(table.toString());
 
-        if (report.strengths.length > 0) {
-          console.log(chalk.green.bold('\nStrengths:'));
-          report.strengths.forEach((str) => console.log(chalk.green(`  ✔ ${str}`)));
-        }
-
-        if (report.weaknesses.length > 0) {
-          console.log(chalk.yellow.bold('\nWeaknesses:'));
-          report.weaknesses.forEach((wk) => console.log(chalk.yellow(`  ! ${wk}`)));
-        }
-
-        if (report.suggestions.length > 0) {
-          console.log(chalk.magenta.bold('\nSuggestions:'));
-          report.suggestions.forEach((sug) => console.log(chalk.magenta(`  💡 ${sug}`)));
+        if (inspection.diagnostics.length > 0) {
+          console.log(chalk.bold('\nDiagnostics:'));
+          inspection.diagnostics.forEach((d) => {
+            const color =
+              d.severity === 'error'
+                ? chalk.red
+                : d.severity === 'warning'
+                  ? chalk.yellow
+                  : chalk.blue;
+            console.log(`  ${color(d.severity)}  ${d.message}  ${chalk.dim(d.code)}`);
+          });
         }
       } catch (error: unknown) {
         spinner.fail('Analysis failed.');

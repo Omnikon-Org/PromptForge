@@ -2,6 +2,8 @@ import { PromptFormatter } from './formatters/types';
 import { MarkdownFormatter } from './formatters/MarkdownFormatter';
 import { PromptValidator } from './validation/Validator';
 import type { ValidationResult } from './validation/types';
+import { inspectPrompt, InspectionReport, Diagnostic } from '../inspection';
+import { CostEstimate } from '../cost';
 
 export interface PromptExample {
   input: string;
@@ -245,5 +247,58 @@ export class Prompt {
    */
   public build(formatter: PromptFormatter = new MarkdownFormatter()): string {
     return formatter.format(this.state);
+  }
+
+  /**
+   * Inspects the prompt to provide detailed analytics including token counts,
+   * cost estimates, diagnostics, and context window checks.
+   *
+   * @param options Inspection options including the target model.
+   * @returns An InspectionReport object.
+   */
+  public async inspect(options: { model?: string } = {}): Promise<InspectionReport> {
+    const compiled = this.build();
+    return inspectPrompt(compiled, options);
+  }
+
+  /**
+   * Returns just the estimated token count for the prompt.
+   * Uses the underlying `inspect()` pipeline.
+   */
+  public async tokens(options: { model?: string } = {}): Promise<number> {
+    const report = await this.inspect(options);
+    return report.tokens;
+  }
+
+  /**
+   * Returns just the estimated cost for the prompt.
+   * Uses the underlying `inspect()` pipeline.
+   */
+  public async cost(options: { model?: string } = {}): Promise<CostEstimate> {
+    const report = await this.inspect(options);
+    return report.cost;
+  }
+
+  /**
+   * Alias for `inspect()` to provide a chainable DX for stats.
+   */
+  public async stats(options: { model?: string } = {}): Promise<InspectionReport> {
+    return this.inspect(options);
+  }
+
+  /**
+   * Returns diagnostics (warnings, errors) for the prompt.
+   * Emulates ESLint-style output.
+   */
+  public async lint(options: { model?: string } = {}): Promise<Diagnostic[]> {
+    const report = await this.inspect(options);
+    return report.diagnostics;
+  }
+
+  /**
+   * Alias for `inspect()` for comprehensive analysis.
+   */
+  public async analyze(options: { model?: string } = {}): Promise<InspectionReport> {
+    return this.inspect(options);
   }
 }

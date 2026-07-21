@@ -26,8 +26,10 @@
     "@promptforgee/optimizer": "workspace:^",
     "@promptforgee/templates": "workspace:^",
     "chalk": "4",
+    "cli-table3": "^0.6.5",
     "commander": "^15.0.0",
-    "ora": "5"
+    "kleur": "^4.1.5",
+    "ora": "^5.4.1"
   },
   "author": "PromptForge Contributors",
   "license": "MIT",

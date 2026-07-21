@@ -24,9 +24,9 @@ Stop concatenating messy, fragile string templates. Start constructing robust, a
 The current state of AI engineering is plagued by brittle string interpolations, invisible whitespace bugs, and unstructured constraints. PromptForge solves this by introducing a robust **Builder Pattern**:
 
 - 🏗 **Immutable Builder:** Construct complex prompts programmatically with zero runtime string interpolation bugs.
-- 🛡 **Strict Validation:** Catch missing contexts, ambiguous rules, and empty roles at compilation time.
+- 🛡 **Strict Validation & Diagnostics:** Catch missing contexts, ambiguous rules, empty roles, and token limits at compilation time.
 - ⚡️ **Type Safety:** Integrated natively with TypeScript to ensure your prompts are robust before execution.
-- ⚛️ **Zero Dependencies:** The core package has zero external dependencies, making it blazing fast and capable of running anywhere (Node.js, Edge, Browser, Cloudflare Workers).
+- ⚛️ **Zero Unnecessary Runtime Overhead:** Tokenizers and analytics are lazy-loaded. The core package remains blazing fast and capable of running anywhere (Node.js, Edge, Browser, Cloudflare Workers).
 - 🔄 **Provider Agnostic:** Compile prompts optimized for any LLM architecture without changing your core builder logic.
 
 ## Installation
@@ -34,15 +34,15 @@ The current state of AI engineering is plagued by brittle string interpolations,
 PromptForge is distributed on npm. Install the core package using your preferred package manager:
 
 ```bash
-npm install @promptforgee/core
+npm install @promptforgee/core @promptforgee/analyzer
 ```
 
 ```bash
-pnpm add @promptforgee/core
+pnpm add @promptforgee/core @promptforgee/analyzer
 ```
 
 ```bash
-yarn add @promptforgee/core
+yarn add @promptforgee/core @promptforgee/analyzer
 ```
 
 ## Quick Start
@@ -58,50 +58,46 @@ const prompt = Prompt.create()
   .constraint('Include CVSS scores for each vulnerability.')
   .constraint('Do not flag false positives for test files.')
   .context('The codebase uses Express and Node.js v20.')
-  .output('JSON array of vulnerability objects adhering to the provided schema.')
-  .build();
+  .output('JSON array of vulnerability objects adhering to the provided schema.');
 
-console.log(prompt);
-/* Output:
-# ROLE
-You are an Expert Senior Security Engineer.
-
-# TASK
-Review the provided source code for security vulnerabilities.
-
-# CONSTRAINTS
-- Include CVSS scores for each vulnerability.
-- Do not flag false positives for test files.
-
-# CONTEXT
-The codebase uses Express and Node.js v20.
-
-# OUTPUT FORMAT
-JSON array of vulnerability objects adhering to the provided schema.
-*/
+console.log(prompt.build());
 ```
 
-## Core Features
+## Advanced Analytics & Developer Experience
 
-### 1. Immutability
+PromptForge acts like ESLint, Prettier, and TypeScript for your prompts.
 
-Every call to the `Prompt` builder returns a _new_ instance. This prevents side effects when sharing baseline prompts across different parts of your application.
+### The Unified Inspection API
 
 ```typescript
-const baseline = Prompt.create().role('Helpful Assistant');
+const report = await prompt.inspect({ model: 'gpt-4o' });
 
-// These two prompts are completely isolated!
-const sqlPrompt = baseline.task('Write a SQL query.');
-const reactPrompt = baseline.task('Write a React component.');
+console.log(`Tokens: ${report.tokens}`);
+console.log(`Estimated Cost: $${report.cost.totalCost}`);
+console.log(`Context Fits: ${report.context.fits}`);
+
+// Or use the chainable convenience methods:
+const tokens = await prompt.tokens();
+const cost = await prompt.cost({ model: 'claude-3-opus-20240229' });
+const diagnostics = await prompt.lint();
 ```
 
-### 2. Type Safety & Validation
+### The Model Registry
 
-PromptForge validates your inputs. If you try to build a prompt without a task, or with contradictory formatting, the builder will warn you or compile fallback structures safely.
+Token counting, cost estimation, and context limits are handled seamlessly via a centralized `ModelRegistry` that supports custom model definitions.
 
-### 3. Structured Composition
+```typescript
+import { ModelRegistry } from '@promptforgee/core';
 
-Instead of writing giant paragraphs that LLMs struggle to parse, PromptForge automatically chunks your instructions into heavily-weighted Markdown sections (`# ROLE`, `# TASK`, `# CONSTRAINTS`). This structure is proven to increase LLM adherence by over 40%.
+ModelRegistry.registerModel({
+  name: 'my-custom-model',
+  provider: 'local',
+  family: 'llama',
+  maxContext: 8192,
+  pricing: { inputPer1k: 0.001, outputPer1k: 0.002, currency: 'USD' },
+  tokenizer: () => import('@promptforgee/core').then((m) => m.countTokens),
+});
+```
 
 ## Provider Compatibility
 
@@ -123,6 +119,18 @@ Pass the compiled string to the Google Generative AI `SystemInstruction` or `con
 
 Use it flawlessly with local models like `llama3` or `mistral` by piping the compiled string to the Ollama generate endpoint.
 
+## The CLI Toolkit
+
+PromptForge ships with a powerful CLI to analyze and format your prompts without writing any code.
+
+```bash
+npx promptforge doctor my-prompt.md    # High-level health and context check
+npx promptforge lint my-prompt.md      # ESLint-style diagnostics and warnings
+npx promptforge stats my-prompt.md     # Generate a cost and token matrix for various models
+npx promptforge analyze my-prompt.md   # Semantic analysis and clarity scoring
+npx promptforge format --write my-prompt.md  # Prettier for prompts
+```
+
 ## API Reference
 
 | Method              | Description                                                              |
@@ -134,11 +142,14 @@ Use it flawlessly with local models like `llama3` or `mistral` by piping the com
 | `.context(text)`    | Provides background information or data.                                 |
 | `.output(text)`     | Defines the exact format the AI should return (e.g. JSON).               |
 | `.build()`          | Compiles the builder state into a final, structured string.              |
+| `.inspect(opts)`    | Returns a unified report containing tokens, cost, and diagnostics.       |
+| `.tokens(opts)`     | Calculates the expected input token count for a given model.             |
+| `.cost(opts)`       | Estimates the API cost for processing the prompt.                        |
+| `.lint(opts)`       | Returns an array of ESLint-style warnings and syntax errors.             |
 
 ## Roadmap
 
 - [ ] **PromptForge Zod Integration:** Native schema injection and validation.
-- [ ] **PromptForge Analyzer:** CLI tool to statically analyze token counts and ambiguity.
 - [ ] **PromptForge Optimizer:** Heuristic engine to strip filler words and optimize context windows.
 - [ ] **React Components:** Headless UI hooks for prompt management.
 

@@ -7,6 +7,9 @@ import { optimizeCommand } from './commands/optimize';
 import { doctorCommand } from './commands/doctor';
 import { templateCommand } from './commands/template';
 import { generateCommand } from './commands/generate';
+import { lintCommand } from './commands/lint';
+import { statsCommand } from './commands/stats';
+import { formatCommand } from './commands/format';
 
 const program = new Command();
 
@@ -22,6 +25,9 @@ optimizeCommand(program);
 doctorCommand(program);
 templateCommand(program);
 generateCommand(program);
+lintCommand(program);
+statsCommand(program);
+formatCommand(program);
 
 // Handle unknown commands
 program.on('command:*', () => {
